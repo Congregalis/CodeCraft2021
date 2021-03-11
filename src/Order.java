@@ -1,7 +1,7 @@
 public class Order {
-    boolean isAdd;
-    String vmType;
-    Long vmId;
+    private boolean isAdd;
+    private String vmType;
+    private Long vmId;
 
     Order(boolean b, String type, Long id) {
         this.isAdd = b;

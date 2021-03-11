@@ -7,15 +7,15 @@ import java.util.regex.Pattern;
 
 public class DataProcessing {
 
-    private Map<String, int[]> server_info; // 可购服务器类型表
-    private Map<String, int[]> vm_info; // 可创建虚拟机类型表
-    List<List<Order>> order_list; // 用户命令序列 （两个维度 天/条）
+    private List<ServerType> serverTypeList; // 服务器类型列表
+    private List<VMType> vmTypeList; // 虚拟机类型列表
+    private List<List<Order>> orderList; // 用户命令序列 （两个维度 天/条）
     private String fileName;
 
     DataProcessing(String name) {
-        server_info = new HashMap<>();
-        vm_info = new HashMap<>();
-        order_list = new ArrayList<>();
+        serverTypeList = new ArrayList<>();
+        vmTypeList = new ArrayList<>();
+        orderList = new ArrayList<>();
         this.fileName = name;
     }
 
@@ -60,7 +60,7 @@ public class DataProcessing {
                         line = br.readLine();
                         list.add(processReq(line));
                     }
-                    order_list.add(list);
+                    orderList.add(list);
                 }
                 line = br.readLine(); // 下一个输入
             }
@@ -80,10 +80,11 @@ public class DataProcessing {
     public void processServer(String s) {
         s = s.substring(1, s.length() - 1);
         String[] serverInfo = s.split(", ");
-        server_info.put(serverInfo[0], new int[]{Integer.parseInt(serverInfo[1]),
+        serverTypeList.add(new ServerType(serverInfo[0],
+                Integer.parseInt(serverInfo[1]),
                 Integer.parseInt(serverInfo[2]),
                 Integer.parseInt(serverInfo[3]),
-                Integer.parseInt(serverInfo[4])});
+                Integer.parseInt(serverInfo[4])));
 //        System.out.println(\"服务器型号：\" + serverInfo[0] +\n" +
 //                "                \"，CPU核数：\" + Integer.parseInt(serverInfo[1]) +\n" +
 //                "                \"，内存大小：\" + Integer.parseInt(serverInfo[2]) +\n" +
@@ -94,9 +95,10 @@ public class DataProcessing {
     public void processVM(String s) {
         s = s.substring(1, s.length() - 1);
         String[] vmInfo = s.split(", ");
-        vm_info.put(vmInfo[0], new int[]{Integer.parseInt(vmInfo[1]),
+        vmTypeList.add(new VMType(vmInfo[0],
+                Integer.parseInt(vmInfo[1]),
                 Integer.parseInt(vmInfo[2]),
-                Integer.parseInt(vmInfo[3])});
+                (vmInfo[3].equals("2"))));
 //        System.out.println("虚拟机型号：" + vmInfo[0] +
 //                "，CPU核数：" + Integer.parseInt(vmInfo[1]) +
 //                "，内存大小：" + Integer.parseInt(vmInfo[2]) +
@@ -117,16 +119,15 @@ public class DataProcessing {
         return order;
     }
 
-    public Map<String, int[]> getServerInfo() {
-        return server_info;
+    public List<ServerType> getServerTypeList() {
+        return serverTypeList;
     }
 
-    public Map<String, int[]> getVminfo() {
-        return vm_info;
+    public List<VMType> getVmTypeList() {
+        return vmTypeList;
     }
 
     public List<List<Order>> getOrderList() {
-        return order_list;
+        return orderList;
     }
-
 }
