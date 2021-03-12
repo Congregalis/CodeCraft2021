@@ -104,10 +104,15 @@ public class ScheduleCenter {
             } else {
                 // 删除vm需要做的事： 1.找到对应vm，从vmList中将其删除 2.释放对应server上的资源
 
-                for (VM vm : vmList) {
+                Iterator<VM> vmIterator = vmList.iterator();
+                while (vmIterator.hasNext()) {
                     // 这里遍历vm的方法后期可以改成创建一个哈希表（key为vmID，value为vm在vmList中的位置）
-                    if (vm.getId().equals(order.getVmId()))
+                    VM vm = vmIterator.next();
+                    if (vm.getId().equals(order.getVmId())) {
                         deleteVM(vm);
+                        // 从列表中删除
+                        vmIterator.remove();
+                    }
                 }
             }
         }
@@ -201,9 +206,6 @@ public class ScheduleCenter {
                 server.getB().runningVM.removeIf(tmp -> tmp.getId().equals(vm.getId()));
             }
         }
-
-        // 从列表中删除
-        vmList.remove(vm);
 
         // 写入记录
         // 删除好像不用输出 Σ( ⚆൧⚆)

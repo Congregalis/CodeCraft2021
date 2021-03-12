@@ -98,7 +98,7 @@ public class DataProcessing {
         vmTypeList.add(new VMType(vmInfo[0],
                 Integer.parseInt(vmInfo[1]),
                 Integer.parseInt(vmInfo[2]),
-                (vmInfo[3].equals("2"))));
+                (vmInfo[3].equals("1"))));
 //        System.out.println("虚拟机型号：" + vmInfo[0] +
 //                "，CPU核数：" + Integer.parseInt(vmInfo[1]) +
 //                "，内存大小：" + Integer.parseInt(vmInfo[2]) +
