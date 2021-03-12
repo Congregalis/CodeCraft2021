@@ -1,13 +1,13 @@
 public class ServerType {
-    String type;
+    private String type;
 
-    int core;
+    private int core;
 
-    int mem;
+    private int mem;
 
-    int hardwareCost;
+    private int hardwareCost;
 
-    int energyCost;
+    private int energyCost;
 
     public String getType() {
         return type;

@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class Server {
@@ -11,12 +12,26 @@ public class Server {
 
     boolean isRunning;
 
+    public Server(Long id, ServerType type) {
+        this.id = id;
+        this.type = type;
+        A = new Node(type.getCore() / 2, type.getMem() / 2);
+        B = new Node(type.getCore() / 2, type.getMem() / 2);
+        isRunning = false;
+    }
+
     private class Node {
         int core;
 
         int mem;
 
         List<VM> runningVM;
+
+        public Node(int core, int mem) {
+            this.core = core;
+            this.mem = mem;
+            runningVM = new ArrayList<>();
+        }
     }
 
     public Long getId() {

@@ -3,6 +3,12 @@ public class VM {
 
     VMType type;
 
+    Server runningServer;
+
+    public void deploy(Server server) {
+        this.runningServer = server;
+    }
+
     public Long getId() {
         return id;
     }

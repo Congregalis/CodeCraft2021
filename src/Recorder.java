@@ -2,7 +2,7 @@ import java.util.List;
 
 public class Recorder {
 
-    private final List<List<Order>> orderList;
+    private List<List<Order>> orderList;
 
     private List<List<String>> purchaseList;
 
