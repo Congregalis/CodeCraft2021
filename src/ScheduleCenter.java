@@ -33,9 +33,7 @@ public class ScheduleCenter {
      * 调度中心每天接受请求序列执行调度，期间会根据服务器使用情况用到purchase(), migrate(), allocate()
      */
     public void dailyOperate(List<Order> orders) {
-        purchaseList = new ArrayList<>();
-        migrationList = new ArrayList<>();
-        allocateList = new ArrayList<>();
+        clearRecord(); // 清除掉上一天的迁移、加购、分配记录数据
 
         // 迁移
 
@@ -72,6 +70,12 @@ public class ScheduleCenter {
 
     public void allocateMultiNode(Long serverId) {
 
+    }
+
+    public void clearRecord() {
+        purchaseList = new ArrayList<>();
+        migrationList = new ArrayList<>();
+        allocateList = new ArrayList<>();
     }
 
     public List<String> getPurchaseList() {
