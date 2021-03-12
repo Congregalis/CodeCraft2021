@@ -37,18 +37,40 @@ public class ScheduleCenter {
         migrationList = new ArrayList<>();
         allocateList = new ArrayList<>();
 
+        // 迁移
+
+
+        // 加购
+
+
+        // 分配
+
 
     }
 
-    public void purchase() {
+    public void purchase(ServerType type, int number) {
 
     }
 
-    public void migrate() {
+    /**
+     * 单结点部署，需要考虑部署在哪个结点上
+     * @param vmId : 虚拟机id
+     * @param serverId : 服务器id
+     * @param nodeName : 'A' 或者 'B', 表示部署在A或者B结点
+     */
+    public void migrateSingleNode(Long vmId, Long serverId, char nodeName) {
 
     }
 
-    public void allocate() {
+    public void migrateMultiNode(Long vmId, Long serverId) {
+
+    }
+
+    public void allocateSingleNode(Long serverId, char nodeName) {
+
+    }
+
+    public void allocateMultiNode(Long serverId) {
 
     }
 
