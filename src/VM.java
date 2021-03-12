@@ -1,9 +1,24 @@
 public class VM {
-    Long id;
+    private Long id;
 
-    VMType type;
+    private VMType type;
 
-    Server runningServer;
+    private Server runningServer;
+
+    private char nodeName;
+
+    public VM(Long id, VMType type, Server runningServer) {
+        this.id = id;
+        this.type = type;
+        this.runningServer = runningServer;
+    }
+
+    public VM(Long id, VMType type, Server runningServer, char name) {
+        this.id = id;
+        this.type = type;
+        this.runningServer = runningServer;
+        this.nodeName = name;
+    }
 
     public void deploy(Server server) {
         this.runningServer = server;
@@ -23,5 +38,21 @@ public class VM {
 
     public void setType(VMType type) {
         this.type = type;
+    }
+
+    public Server getRunningServer() {
+        return runningServer;
+    }
+
+    public void setRunningServer(Server runningServer) {
+        this.runningServer = runningServer;
+    }
+
+    public char getNodeName() {
+        return nodeName;
+    }
+
+    public void setNodeName(char nodeName) {
+        this.nodeName = nodeName;
     }
 }

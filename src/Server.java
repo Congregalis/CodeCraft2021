@@ -2,15 +2,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Server {
-    Long id;
+    private Long id;
 
-    ServerType type;
+    private ServerType type;
 
-    Node A;
+    private Node A;
 
-    Node B;
+    private Node B;
 
-    boolean isRunning;
+    private boolean isRunning;
 
     public Server(Long id, ServerType type) {
         this.id = id;
@@ -20,7 +20,7 @@ public class Server {
         isRunning = false;
     }
 
-    private class Node {
+    public class Node {
         int core;
 
         int mem;
