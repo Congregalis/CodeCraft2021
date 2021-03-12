@@ -51,6 +51,8 @@ public class ScheduleCenter {
             }
         }
 
+        System.out.println("需要CPU：" + needCPU + " 需要MEM：" + needMem);
+
         // 根据add需求一次性购买服务器
         Long count = 0L; // 用来有序赋予id
         while (needCPU > 0 && needMem > 0) {
@@ -58,8 +60,11 @@ public class ScheduleCenter {
             count++;
             needCPU -= serverTypeList.get(0).getCore();
             needMem -= serverTypeList.get(0).getMem();
+            cost += serverTypeList.get(0).getHardwareCost();
         }
         System.out.println("购买了" + serverList.size()  + "个" + serverTypeList.get(0).getType() + "服务器");
+        purchaseList.add("(" + "purchase, " + serverList.size() + ")");
+        purchaseList.add("(" + serverList.get(0).getType().getType() + ", " + serverList.size() + ")");
     }
 
     /**
@@ -77,13 +82,14 @@ public class ScheduleCenter {
         // 分配
         for (Order order : orders) {
             if (order.isAdd()) {
-                // 添加vm需要做的事： 1.创建新的vm，加入vmList 2.减少该vm占用的server的对应参数
+                // 添加vm需要做的事： 1.创建新的vm，加入vmList 2.减少该vm占用的server的对应参数 3.若有服务器开机，isRunning设为true
 
                 if (vmTypeMap.get(order.getVmType()).isMultNode) {
                     for (Server server : serverList) {
                         // 遍历server列表，选可以的进行分配
                         if (checkMulti(server, vmTypeMap.get(order.getVmType()))) {
                             allocateMultiNode(server, order.getVmId(), vmTypeMap.get(order.getVmType()));
+                            break;
                         }
                         // 此处还应考虑如果遍历完了都没有可分配的时，怕抛出异常（后面再考虑）
                     }
@@ -92,8 +98,10 @@ public class ScheduleCenter {
                         // 遍历server列表中所有server下的结点，选可以的进行分配
                         if (checkSingle(server, vmTypeMap.get(order.getVmType()), 'A')) {
                             allocateSingleNode(server, 'A', order.getVmId(), vmTypeMap.get(order.getVmType()));
+                            break;
                         } else if (checkSingle(server, vmTypeMap.get(order.getVmType()), 'B')) {
                             allocateSingleNode(server, 'B', order.getVmId(), vmTypeMap.get(order.getVmType()));
+                            break;
                         }
                         // 此处还应考虑如果遍历完了都没有可分配的时，抛出异常（后面再考虑）
                     }
@@ -102,7 +110,7 @@ public class ScheduleCenter {
                 // 以下写记录，用以输出
 
             } else {
-                // 删除vm需要做的事： 1.找到对应vm，从vmList中将其删除 2.释放对应server上的资源
+                // 删除vm需要做的事： 1.找到对应vm，从vmList中将其删除 2.释放对应server上的资源 3.若有服务器关机，isRunning设为false
 
                 Iterator<VM> vmIterator = vmList.iterator();
                 while (vmIterator.hasNext()) {
@@ -115,6 +123,12 @@ public class ScheduleCenter {
                     }
                 }
             }
+        }
+
+        // 计算每天能耗成本
+        for (Server server : serverList) {
+            if (server.isRunning())
+                cost += server.getType().getEnergyCost();
         }
 
     }
@@ -139,8 +153,8 @@ public class ScheduleCenter {
 
     /**
      * 其中要更改server的剩余性能
-     * @param server
-     * @param nodeName
+     * @param server 待分配服务器
+     * @param nodeName 分配到哪个结点
      * @return 返回分配成功的虚拟机
      */
     public VM allocateSingleNode(Server server, char nodeName, Long vmId, VMType vmType) {
@@ -156,6 +170,7 @@ public class ScheduleCenter {
             server.getB().mem -= vmType.getMem();
         }
 
+        if (!server.isRunning()) server.setRunning(true);
         // 添加记录
         allocateList.add("(" + server.getId() + ", " + nodeName + ")");
 
@@ -173,6 +188,7 @@ public class ScheduleCenter {
         server.getB().core -= vmType.getCore() / 2;
         server.getB().mem -= vmType.getMem() / 2;
 
+        if (!server.isRunning()) server.setRunning(true);
         // 添加记录
         allocateList.add("(" + server.getId() + ")");
 
@@ -207,6 +223,12 @@ public class ScheduleCenter {
             }
         }
 
+        server.setRunning(! (
+                server.getA().core == server.getType().getCore() &&
+                server.getA().mem == server.getType().getMem() &&
+                server.getB().core == server.getType().getCore() &&
+                server.getB().mem == server.getType().getMem()
+                ));
         // 写入记录
         // 删除好像不用输出 Σ( ⚆൧⚆)
 

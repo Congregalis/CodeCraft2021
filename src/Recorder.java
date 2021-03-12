@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class Recorder {
@@ -12,6 +13,9 @@ public class Recorder {
 
     public Recorder(List<List<Order>> orderList) {
         this.orderList = orderList;
+        purchaseList = new ArrayList<>();
+        migrationList = new ArrayList<>();
+        allocateList = new ArrayList<>();
     }
 
     public void addPurchaseRecord(List<String> purchaseRecord) {
@@ -19,11 +23,11 @@ public class Recorder {
     }
 
     public void addMigrationRecord(List<String> migrationRecord) {
-        purchaseList.add(migrationRecord);
+        migrationList.add(migrationRecord);
     }
 
     public void addAllocateRecord(List<String> allocateRecord) {
-        purchaseList.add(allocateRecord);
+        allocateList.add(allocateRecord);
     }
 
     public List<List<Order>> getOrderList() {
